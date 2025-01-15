@@ -1,10 +1,10 @@
 package am.mino.secureprefs
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.security.keystore.KeyGenParameterSpec
 import android.security.keystore.KeyProperties
 import android.util.Base64
+import androidx.annotation.OpenForTesting
 import java.security.KeyStore
 import javax.crypto.Cipher
 import javax.crypto.KeyGenerator
@@ -16,18 +16,13 @@ import javax.crypto.spec.GCMParameterSpec
  * Data is encrypted using the Android Keystore system.
  */
 internal class SecurePreferencesImpl(
-    context: Context,
     private val alias: String, // Alias for the encryption key stored in Keystore
     private val password: String, // Password for accessing the key
-    sharedPrefsFileName: String, // Name of the SharedPreferences file
+    private val sharedPrefs: SharedPreferences,
 ) : SecurePreferences {
 
     // Keystore instance to manage cryptographic keys
     private val keyStore = KeyStore.getInstance(KEY_STORE_TYPE).apply { load(null) }
-
-    // SharedPreferences instance for storing encrypted data
-    private val sharedPrefs: SharedPreferences =
-        context.getSharedPreferences(sharedPrefsFileName, Context.MODE_PRIVATE)
 
     // Methods to securely save data
     override fun putString(key: String, value: String?) {
@@ -102,7 +97,7 @@ internal class SecurePreferencesImpl(
     // Retrieve data from SharedPreferences and decrypt it
     private fun <T> getFromStorage(key: String, defaultValue: T?): T? {
         val value: Any? = when (defaultValue) {
-            is String -> sharedPrefs.getString(key, defaultValue)
+            is String? -> sharedPrefs.getString(key, defaultValue)
                 ?.let { decryptDataWithKeystore(it) }
 
             is Int -> sharedPrefs.getInt(key, defaultValue).let {
@@ -127,7 +122,8 @@ internal class SecurePreferencesImpl(
     }
 
     // Retrieve or generate a cryptographic key from the Keystore
-    private fun getKey(): SecretKey {
+    @OpenForTesting
+    fun getKey(): SecretKey {
         val key = keyStore.getKey(alias, password.toCharArray()) as SecretKey?
         if (key != null) {
             return key
@@ -147,7 +143,8 @@ internal class SecurePreferencesImpl(
     }
 
     // Encrypt data using the Keystore
-    private fun encryptDataWithKeystore(data: String): String {
+    @OpenForTesting
+    fun encryptDataWithKeystore(data: String): String {
         val cipher = Cipher.getInstance(TRANSFORMATION_TYPE)
         val key = getKey()
         cipher.init(Cipher.ENCRYPT_MODE, key)
@@ -163,7 +160,8 @@ internal class SecurePreferencesImpl(
     }
 
     // Decrypt data using the Keystore
-    private fun decryptDataWithKeystore(encryptedData: String): String {
+    @OpenForTesting
+    fun decryptDataWithKeystore(encryptedData: String): String {
         val parts = encryptedData.split(DELIMITERS)
         val iv = Base64.decode(parts[0], Base64.DEFAULT)
         val cipherText = Base64.decode(parts[1], Base64.DEFAULT)

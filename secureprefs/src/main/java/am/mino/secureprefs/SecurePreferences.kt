@@ -1,6 +1,5 @@
 package am.mino.secureprefs
 
-import android.content.Context
 import android.content.SharedPreferences
 
 // Interface for managing secure preferences
@@ -55,24 +54,21 @@ interface SecurePreferences {
         /**
          * Factory method to create a SecurePreferences implementation.
          *
-         * @param context Application context to access SharedPreferences.
+         * @param sharedPrefs Shared preferences where should be stored your encrypted data.
          * @param alias Unique alias for the encryption key in the Android Keystore. Default is "SecurePrefsKey".
          * @param password Password used for key management. Default is "DefaultPassword".
-         * @param sharedPrefsFileName Name of the SharedPreferences file. Default is "SecurePreferences".
          * @return An instance of SecurePreferencesImpl.
          */
         fun create(
-            context: Context,
+            sharedPrefs: SharedPreferences,
             alias: String = "SecurePrefsKey",
             password: String = "DefaultPassword",
-            sharedPrefsFileName: String = "SecurePreferences"
         ): SecurePreferences {
             // Returns an instance of the SecurePreferencesImpl class
             return SecurePreferencesImpl(
-                context = context,
+                sharedPrefs = sharedPrefs,
                 alias = alias,
                 password = password,
-                sharedPrefsFileName = sharedPrefsFileName
             )
         }
     }
