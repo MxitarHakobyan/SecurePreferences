@@ -95,25 +95,26 @@ internal class SecurePreferencesImpl(
     }
 
     // Retrieve data from SharedPreferences and decrypt it
+    @Suppress("UNCHECKED_CAST")
     private fun <T> getFromStorage(key: String, defaultValue: T?): T? {
-        val value: Any? = when (defaultValue) {
+        val value = when (defaultValue) {
             is String? -> sharedPrefs.getString(key, defaultValue)
-                ?.let { decryptDataWithKeystore(it) }
+                ?.let { if (it == defaultValue) defaultValue else decryptDataWithKeystore(it) }
 
-            is Int -> sharedPrefs.getInt(key, defaultValue).let {
-                if (it == defaultValue) defaultValue else decryptDataWithKeystore(it.toString()).toInt()
+            is Int -> sharedPrefs.getString(key, null).let {
+                if (it == null) defaultValue else decryptDataWithKeystore(it).toInt()
             }
 
-            is Long -> sharedPrefs.getLong(key, defaultValue).let {
-                if (it == defaultValue) defaultValue else decryptDataWithKeystore(it.toString()).toLong()
+            is Long -> sharedPrefs.getString(key, null).let {
+                if (it == null) defaultValue else decryptDataWithKeystore(it).toLong()
             }
 
-            is Float -> sharedPrefs.getFloat(key, defaultValue).let {
-                if (it == defaultValue) defaultValue else decryptDataWithKeystore(it.toString()).toFloat()
+            is Float -> sharedPrefs.getString(key, null).let {
+                if (it == null) defaultValue else decryptDataWithKeystore(it).toFloat()
             }
 
-            is Boolean -> sharedPrefs.getBoolean(key, defaultValue).let {
-                if (it == defaultValue) defaultValue else decryptDataWithKeystore(it.toString()).toBoolean()
+            is Boolean -> sharedPrefs.getString(key, null).let {
+                if (it == null) defaultValue else decryptDataWithKeystore(it).toBoolean()
             }
 
             else -> throw IllegalArgumentException("Unsupported type")

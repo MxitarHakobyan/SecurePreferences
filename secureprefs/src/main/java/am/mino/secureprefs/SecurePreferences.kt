@@ -20,7 +20,7 @@ interface SecurePreferences {
     fun putBoolean(key: String, value: Boolean)
 
     // Retrieve a securely stored String value, or return the default if not found
-    fun getString(key: String, defaultValue: String?): String?
+    fun getString(key: String, defaultValue: String? = null): String?
 
     // Retrieve a securely stored Int value, or return the default if not found
     fun getInt(key: String, defaultValue: Int): Int
@@ -55,14 +55,14 @@ interface SecurePreferences {
          * Factory method to create a SecurePreferences implementation.
          *
          * @param sharedPrefs Shared preferences where should be stored your encrypted data.
-         * @param alias Unique alias for the encryption key in the Android Keystore. Default is "SecurePrefsKey".
-         * @param password Password used for key management. Default is "DefaultPassword".
+         * @param alias Unique alias for the encryption key in the Android Keystore.
+         * @param password Password used for key management.
          * @return An instance of SecurePreferencesImpl.
          */
         fun create(
             sharedPrefs: SharedPreferences,
-            alias: String = "SecurePrefsKey",
-            password: String = "DefaultPassword",
+            alias: String,
+            password: String,
         ): SecurePreferences {
             // Returns an instance of the SecurePreferencesImpl class
             return SecurePreferencesImpl(
