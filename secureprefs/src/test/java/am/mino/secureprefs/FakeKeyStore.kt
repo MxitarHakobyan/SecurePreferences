@@ -27,7 +27,6 @@ object FakeAndroidKeyStore {
         })
     }
 
-    @Suppress("unused")
     class FakeKeyStore : KeyStoreSpi() {
         private val wrapped = KeyStore.getInstance(KeyStore.getDefaultType())
 
@@ -76,7 +75,6 @@ object FakeAndroidKeyStore {
             wrapped.getKey(alias, password)
     }
 
-    @Suppress("unused")
     class FakeAesKeyGenerator : KeyGeneratorSpi() {
         private val wrapped = KeyGenerator.getInstance("AES")
 
