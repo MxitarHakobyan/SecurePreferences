@@ -14,5 +14,3 @@ A lightweight library for securely storing and retrieving key-value data in Andr
 ## Installation
 
 To include the library in your project:
-
-1. Add the library files to your project.
