@@ -1,3 +1,5 @@
+import org.gradle.api.tasks.testing.logging.TestExceptionFormat
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -87,5 +89,13 @@ publishing {
                 password = System.getenv("GITHUB_TOKEN")
             }
         }
+    }
+}
+
+tasks.withType(Test::class) {
+    testLogging {
+        events("skipped", "failed", "passed")
+        exceptionFormat = TestExceptionFormat.FULL
+        showStandardStreams = true
     }
 }
