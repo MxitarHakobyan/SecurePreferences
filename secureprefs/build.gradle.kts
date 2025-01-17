@@ -83,8 +83,8 @@ publishing {
             url = uri("https://maven.pkg.github.com/MxitarHakobyan/SecurePreferences.git")
 
             credentials {
-                username = project.findProperty("gpr.user") as String? ?: System.getenv("GITHUB_USER")
-                password = project.findProperty("gpr.token") as String? ?: System.getenv("GITHUB_TOKEN")
+                username = System.getenv("GITHUB_USER")
+                password = System.getenv("GITHUB_TOKEN")
             }
         }
     }
