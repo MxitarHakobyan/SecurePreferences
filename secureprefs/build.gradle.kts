@@ -1,3 +1,4 @@
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import org.gradle.api.tasks.testing.logging.TestExceptionFormat
 
 plugins {
@@ -44,7 +45,7 @@ dependencies {
 publishing {
     publications {
         create<MavenPublication>("release") {
-            artifact("${layout.buildDirectory}/outputs/aar/${project.name}-release.aar")
+            artifact(file("${buildDir}/outputs/aar/${project.name}-release.aar"))
 
             groupId = "am.mino"
             artifactId = "secureprefs"
@@ -78,15 +79,15 @@ publishing {
             }
         }
     }
-
+    val properties = gradleLocalProperties(rootDir, providers)
     repositories {
         maven {
             name = "SecurePreferences"
-            url = uri("https://maven.pkg.github.com/MxitarHakobyan/SecurePreferences.git")
+            url = uri("https://maven.pkg.github.com/MxitarHakobyan/SecurePreferences")
 
             credentials {
-                username = System.getenv("GITHUB_USER")
-                password = System.getenv("GITHUB_TOKEN")
+                username = System.getenv("GITHUB_USER") ?: properties.getProperty("GITHUB_USER")
+                password = System.getenv("GITHUB_TOKEN") ?: properties.getProperty("GITHUB_TOKEN")
             }
         }
     }
@@ -98,4 +99,8 @@ tasks.withType(Test::class) {
         exceptionFormat = TestExceptionFormat.FULL
         showStandardStreams = true
     }
+}
+
+tasks.named("publishReleasePublicationToSecurePreferencesRepository") {
+    dependsOn("assembleRelease")
 }
