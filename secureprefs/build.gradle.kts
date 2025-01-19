@@ -47,14 +47,14 @@ publishing {
         create<MavenPublication>("release") {
             artifact(file("${buildDir}/outputs/aar/${project.name}-release.aar"))
 
-            groupId = "am.mino"
-            artifactId = "secureprefs"
-            version = "1.0.0"
+            groupId = "com.github.MxitarHakobyan"
+            artifactId = "SecurePreferences"
+            version = "1.0.1"
 
             pom {
-                name.set("SecurePrefs")
+                name.set("SecurePreferences")
                 description.set("A secure preferences library for Android.")
-                url.set("https://github.com/MxitarHakobyan/SecurePreferences.git")
+                url.set("https://github.com/MxitarHakobyan/SecurePreferences")
 
                 licenses {
                     license {
@@ -65,16 +65,16 @@ publishing {
 
                 developers {
                     developer {
-                        id.set("mino")
-                        name.set("Mkhitar")
+                        id.set("MxitarHakobyan")
+                        name.set("Mkhitar Hakobyan")
                         email.set("hmxo14@gmail.com")
                     }
                 }
 
                 scm {
-                    connection.set("scm:git:https://github.com/MxitarHakobyan/SecurePreferences.git")
+                    connection.set("scm:git:git://github.com/MxitarHakobyan/SecurePreferences.git")
                     developerConnection.set("scm:git:ssh://git@github.com/MxitarHakobyan/SecurePreferences.git")
-                    url.set("https://github.com/MxitarHakobyan/SecurePreferences.git")
+                    url.set("https://github.com/MxitarHakobyan/SecurePreferences")
                 }
             }
         }
