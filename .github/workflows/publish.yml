@@ -1,9 +1,6 @@
-name: Android Library CI/CD
+name: Master Test and Publishing
 
 on:
-  push:
-    branches:
-      - master
   pull_request:
     branches:
       - master
