@@ -16,5 +16,5 @@ To get started with SecurePreferences, include the following in your app-level `
 
 ```gradle
 dependencies {
-    implementation 'am.mino:secureprefs:1.0.0'
+    implementation 'com.github.MxitarHakobyan.securepreferences'
 }
