@@ -72,7 +72,7 @@ publishing {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/MxitarHakobyan/SecurePreferences.git")
+                    connection.set("scm:git:https://github.com/MxitarHakobyan/SecurePreferences.git")
                     developerConnection.set("scm:git:ssh://git@github.com/MxitarHakobyan/SecurePreferences.git")
                     url.set("https://github.com/MxitarHakobyan/SecurePreferences")
                 }
