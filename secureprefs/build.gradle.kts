@@ -3,6 +3,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.mavenPublish)
     alias(libs.plugins.nmcp)
+    id("signing")
 }
 
 android {
@@ -39,6 +40,10 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.mockk)
     testImplementation(libs.junit)
+}
+
+mavenPublishing {
+    signAllPublications()
 }
 
 nmcp {
