@@ -1,13 +1,14 @@
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
-    id("com.vanniktech.maven.publish") version "0.28.0" apply false
-    id("com.gradleup.nmcp") version "0.0.7" apply false
+    alias(libs.plugins.mavenPublish)
+    alias(libs.plugins.nmcp)
 }
 
 android {
     namespace = "am.mino.secureprefs"
     compileSdk = 35
+    version = findProperty("VERSION_NAME") as String
 
     defaultConfig {
         minSdk = 23
@@ -38,4 +39,15 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     testImplementation(libs.mockk)
     testImplementation(libs.junit)
+}
+
+nmcp {
+    publishAllPublications {
+        val keyUsername = "SONATYPE_USERNAME"
+        val keyPassword = "SONATYPE_PASSWORD"
+        username = findProperty(keyUsername)?.toString() ?: System.getenv(keyUsername)
+        password = findProperty(keyPassword)?.toString() ?: System.getenv(keyPassword)
+
+        publicationType = "USER_MANAGED"
+    }
 }
