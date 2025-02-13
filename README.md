@@ -16,5 +16,16 @@ To get started with SecurePreferences, include the following in your app-level `
 
 ```gradle
 dependencies {
-    implementation 'com.github.MxitarHakobyan.securepreferences:1.0.1'
+    implementation("io.github.mxitarhakobyan:securepreferences:1.0.1")
 }
+```
+
+## Usage
+
+```kotlin
+val securePrefs = SecurePreferences.SecurePrefs.create(
+    sharedPrefs = context.getSharedPreferences("sharedPrefs", MODE_PRIVATE),
+    alias = "Alias for encryption",
+    password = "Don't Share It"
+)
+```
