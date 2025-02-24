@@ -9,8 +9,8 @@ espressoCore = "3.6.1"
 lifecycleRuntimeKtx = "2.8.7"
 activityCompose = "1.10.0"
 composeBom = "2025.01.01"
-mavenpub = "0.30.0"
-nmcp = "0.0.8"
+mavenpub = "0.28.0"
+nmcp = "0.0.7"
 
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }

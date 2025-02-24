@@ -1,3 +1,6 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -22,8 +25,7 @@ android {
         release {
             isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro"
             )
         }
     }
@@ -46,12 +48,38 @@ mavenPublishing {
     signAllPublications()
 }
 
+// Function to load properties from local.properties
+fun loadLocalProperties(): Properties {
+    val properties = Properties()
+    val file = File(rootProject.projectDir, "local.properties")
+    if (file.exists()) {
+        FileInputStream(file).use { properties.load(it) }
+    }
+    return properties
+}
+
+val localProps = loadLocalProperties()
+
+
+val signingKeyId: String? = localProps.getProperty("signing.keyId")
+val signingPassword: String? = localProps.getProperty("signing.password")
+val signingKeyRingFile: String? = localProps.getProperty("signing.secretKeyRingFile")
+
+signing {
+    useGpgCmd()
+    useInMemoryPgpKeys(
+        localProps.getProperty("SIGNING_KEY") ?: System.getenv("SIGNING_KEY"),
+        localProps.getProperty("SIGNING_PASSWORD") ?: System.getenv("SIGNING_PASSWORD")
+    )
+    sign(publishing.publications)
+}
+
 nmcp {
     publishAllPublications {
         val keyUsername = "SONATYPE_USERNAME"
         val keyPassword = "SONATYPE_PASSWORD"
-        username = findProperty(keyUsername)?.toString() ?: System.getenv(keyUsername)
-        password = findProperty(keyPassword)?.toString() ?: System.getenv(keyPassword)
+        username = localProps.getProperty(keyUsername)?.toString() ?: System.getenv(keyUsername)
+        password = localProps.getProperty(keyPassword)?.toString() ?: System.getenv(keyPassword)
 
         publicationType = "USER_MANAGED"
     }
